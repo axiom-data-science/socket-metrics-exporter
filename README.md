@@ -28,14 +28,3 @@ To run the binary without building a release version or installing to a locally 
     cargo run
 
 For details about `cargo` and using `cargo`, please see [The Cargo Book](https://doc.rust-lang.org/cargo/commands/index.html)
-
-Docker
-------
-
-To build the docker image:
-
-    docker build -t socket-metrics-exporter .
-
-To run the image as a docker container
-
-    docker run -it --rm socket-metrics-exporter
