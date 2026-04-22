@@ -1,6 +1,5 @@
-![Pipeline Status](http://git.axiom/axiom/socket-metrics-exporter/badges/main/pipeline.svg)
-![Cargo Audit](http://git.axiom/axiom/socket-metrics-exporter/-/jobs/artifacts/main/raw/cargo-audit.svg?job=badger-cargo-audit)
-![Trivy](http://git.axiom/axiom/socket-metrics-exporter/-/jobs/artifacts/main/raw/trivy-audit.svg?job=badger-trivy)
+[![CI](https://github.com/axiom-data-science/socket-metrics-exporter/actions/workflows/ci.yml/badge.svg)](https://github.com/axiom-data-science/socket-metrics-exporter/actions/workflows/ci.yml)
+[![Security audit](https://github.com/axiom-data-science/socket-metrics-exporter/actions/workflows/audit.yml/badge.svg)](https://github.com/axiom-data-science/socket-metrics-exporter/actions/workflows/audit.yml)
 
 
 socket-metrics-exporter

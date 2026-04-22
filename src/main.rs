@@ -9,11 +9,11 @@ use std::sync::Arc;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use actix_web::rt;
-use actix_web::{App, HttpResponse, HttpServer, Responder, get, web};
+use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
 use clap::Parser;
 use prometheus::core::{AtomicU64, GenericGauge, GenericGaugeVec};
 use prometheus::{Encoder, Opts, Registry, TextEncoder};
-use socket_metrics_exporter::{SocketStats, collect};
+use socket_metrics_exporter::{collect, SocketStats};
 use tokio::time;
 use tracing::{error, info, warn};
 use tracing_subscriber::EnvFilter;
@@ -23,7 +23,12 @@ use tracing_subscriber::EnvFilter;
 #[command(version, about)]
 struct Args {
     /// TCP host bind interface
-    #[arg(short = 'i', long, default_value = "localhost", env = "SS_EXPORTER_HOST")]
+    #[arg(
+        short = 'i',
+        long,
+        default_value = "localhost",
+        env = "SS_EXPORTER_HOST"
+    )]
     host: String,
 
     /// TCP port
@@ -31,12 +36,7 @@ struct Args {
     port: u16,
 
     /// Interval between `ss -s` refreshes, in seconds
-    #[arg(
-        short = 'n',
-        long,
-        default_value_t = 15,
-        env = "SS_EXPORTER_INTERVAL"
-    )]
+    #[arg(short = 'n', long, default_value_t = 15, env = "SS_EXPORTER_INTERVAL")]
     interval_secs: u64,
 }
 
