@@ -1,0 +1,85 @@
+
+
+stages:
+  - build
+  - test
+  - scan
+  - badge
+
+variables:
+  PROJ: "socket-metrics-exporter"
+  IMAGE: $PROJ:$CI_COMMIT_REF_NAME
+  RUST_IMAGE: rust:1.94.1-slim-bookworm
+
+  AXIOM_LATEST: registry.axiom/$PROJ:latest
+  AXIOM_TAG: registry.axiom/$PROJ:$CI_COMMIT_TAG
+  DOCKER_BUILDKIT: 1
+
+build_image:
+  stage: build
+  script:
+    - docker build $BUILDOPTS -t $IMAGE .
+
+
+
+
+clippy:
+  image: $RUST_IMAGE
+  stage: test
+  script:
+    - rustup component add clippy
+    - cargo clippy -- -Dwarnings
+
+
+test:
+  image: $RUST_IMAGE
+  stage: test
+  script:
+    - cargo test
+
+
+trivy_scan:
+  image:
+    name: aquasec/trivy@sha256:3d1f862cb6c4fe13c1506f96f816096030d8d5ccdb2380a3069f7bf07daa86aa
+    entrypoint: [""]
+  stage: scan
+  script:
+    - trivy image --format json --output trivy-report.json $IMAGE
+  artifacts:
+    paths:
+      - trivy-report.json
+
+build_audit:
+  image: $RUST_IMAGE
+  stage: scan
+  allow_failure: true
+  script:
+    - cargo install cargo-audit
+    - cargo build
+    - cargo audit --json > cargo-audit.json
+  artifacts:
+    paths:
+      - cargo-audit.json
+
+
+badger-cargo-audit:
+  image:
+    name: registry.axiom/security-badger:latest
+    entrypoint: [""]
+  stage: badge
+  script:
+    - security-badger --svg cargo-audit.svg --label 'Cargo Audit' cargo-audit.json
+  artifacts:
+    paths:
+      - cargo-audit.svg
+
+badger-trivy:
+  image:
+    name: registry.axiom/security-badger:latest
+    entrypoint: [""]
+  stage: badge
+  script:
+    - security-badger --svg trivy-audit.svg --label 'Trivy' trivy-report.json
+  artifacts:
+    paths:
+      - trivy-audit.svg
