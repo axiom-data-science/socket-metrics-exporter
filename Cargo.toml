@@ -2,8 +2,33 @@
 name = "socket-metrics-exporter"
 version = "0.1.0"
 edition = "2021"
+description = "Prometheus exporter for `ss -s` socket metrics"
+license = "MIT"
+authors = ["Luke Campbell <luke@axds.co>"]
+homepage = "https://github.com/axiom-data-science/socket-metrics-exporter"
+repository = "https://github.com/axiom-data-science/socket-metrics-exporter"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[package.metadata.deb]
+maintainer = "Luke Campbell <luke@axds.co>"
+copyright = "2026 Axiom Data Science, LLC"
+license-file = ["LICENSE", "0"]
+extended-description = """
+Prometheus exporter that parses the output of `ss -s` and exposes socket \
+statistics (total sockets, TCP state breakdown, and the transport table by \
+address family) via an HTTP /metrics endpoint."""
+depends = "$auto, iproute2"
+section = "net"
+priority = "optional"
+assets = [
+    ["target/release/socket-metrics-exporter", "usr/bin/", "755"],
+    ["README.md", "usr/share/doc/socket-metrics-exporter/README", "644"],
+    ["debian/default", "etc/default/socket-metrics-exporter", "644"],
+]
+conf-files = ["/etc/default/socket-metrics-exporter"]
+maintainer-scripts = "debian/"
+systemd-units = { unit-scripts = "debian/", enable = true, start = true, restart-after-upgrade = true }
 
 [dependencies]
 actix-web = "4.11.0"

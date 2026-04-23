@@ -1,0 +1,31 @@
+[Unit]
+Description=Prometheus exporter for `ss -s` socket metrics
+Documentation=https://github.com/axiom-data-science/socket-metrics-exporter
+After=network.target
+
+[Service]
+Type=simple
+DynamicUser=yes
+EnvironmentFile=-/etc/default/socket-metrics-exporter
+ExecStart=/usr/bin/socket-metrics-exporter
+Restart=on-failure
+RestartSec=5
+
+# Hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
+RestrictNamespaces=true
+LockPersonality=true
+MemoryDenyWriteExecute=true
+RestrictRealtime=true
+SystemCallArchitectures=native
+
+[Install]
+WantedBy=multi-user.target

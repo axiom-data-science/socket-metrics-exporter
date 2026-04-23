@@ -1,0 +1,14 @@
+# Environment overrides for socket-metrics-exporter.
+# Uncomment and edit as needed, then `systemctl restart socket-metrics-exporter`.
+
+# Host interface to bind to. Default: localhost.
+#SS_EXPORTER_HOST=0.0.0.0
+
+# TCP port to listen on. Default: 9186.
+#SS_EXPORTER_PORT=9186
+
+# Seconds between `ss -s` refreshes. Default: 15.
+#SS_EXPORTER_INTERVAL=15
+
+# tracing-subscriber env filter. Default: info.
+#RUST_LOG=info

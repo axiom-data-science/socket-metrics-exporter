@@ -27,3 +27,20 @@ To run the binary without building a release version or installing to a locally 
     cargo run
 
 For details about `cargo` and using `cargo`, please see [The Cargo Book](https://doc.rust-lang.org/cargo/commands/index.html)
+
+Debian package
+--------------
+
+A Debian package (including a systemd unit) can be built with [`cargo-deb`](https://github.com/kornelski/cargo-deb):
+
+    cargo install cargo-deb
+    cargo deb
+
+The resulting `.deb` is written to `target/debian/`. Install it with:
+
+    sudo dpkg -i target/debian/socket-metrics-exporter_*.deb
+
+After install the `socket-metrics-exporter.service` unit is enabled and
+started automatically. It reads environment overrides from
+`/etc/default/socket-metrics-exporter` (see that file for the available
+`SS_EXPORTER_*` variables).
