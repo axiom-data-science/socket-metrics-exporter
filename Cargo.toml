@@ -18,7 +18,8 @@ extended-description = """
 Prometheus exporter that parses the output of `ss -s` and exposes socket \
 statistics (total sockets, TCP state breakdown, and the transport table by \
 address family) via an HTTP /metrics endpoint."""
-depends = "$auto, iproute2"
+# Statically linked against musl — no libc6 dependency.
+depends = "iproute2"
 section = "net"
 priority = "optional"
 assets = [
@@ -31,7 +32,7 @@ maintainer-scripts = "debian/"
 systemd-units = { unit-scripts = "debian/", enable = true, start = true, restart-after-upgrade = true }
 
 [dependencies]
-actix-web = "4.11.0"
+actix-web = { version = "4.11.0", default-features = false, features = ["macros"] }
 clap = { version = "4.6.1", features = ["derive", "cargo", "env"] }
 prometheus = "0.14.0"
 thiserror = "2.0.17"
